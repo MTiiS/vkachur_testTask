@@ -154,18 +154,19 @@ class UsersControllerTest {
     @Test
     void updateUser_ValidRequest_ReturnsOk() throws Exception {
         // Prepare a user creation request
+        LocalDate dateOfBirth = LocalDate.now().minusYears(25);
         UserCreateRequest request = new UserCreateRequest(
                 "NewAndriy",
                 "NewMoroz",
                 "newtest@example.com",
-                LocalDate.now().minusYears(25),
+                dateOfBirth,
                 null,
                 null);
 
         // Perform a PUT request to update a user and expect OK response
         mockMvc.perform(put("/api/users/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{  \"firstName\": \"NewAndriy\", \"lastName\": \"NewMoroz\", \"email\": \"newtest@example.com\",  \"dateOfBirth\": \"1999-04-29\" }"))
+                        .content("{  \"firstName\": \"NewAndriy\", \"lastName\": \"NewMoroz\", \"email\": \"newtest@example.com\",  \"dateOfBirth\": \"" + dateOfBirth + "\" }"))
                 .andExpect(status().isOk());
 
         // Verify that the updateUser method was called with the correct parameters
@@ -197,7 +198,7 @@ class UsersControllerTest {
                 "Vlad",
                 "Simpson",
                 "Vlad@example.com",
-                LocalDate.now().minusYears(30),
+                LocalDate.of(1990, 5, 15),
                 "123456789",
                 "Bereznyakivska 12"));
 
@@ -206,7 +207,7 @@ class UsersControllerTest {
                 "Dima",
                 "Smith",
                 "Dima@example.com",
-                LocalDate.now().minusYears(25),
+                LocalDate.of(2000, 5, 15),
                 "987654321",
                 "Bereznyakivska 31"));
 
@@ -240,7 +241,7 @@ class UsersControllerTest {
                 "Vlad",
                 "Simpson",
                 "Vlad@example.com",
-                LocalDate.now().minusYears(30),
+                LocalDate.of(1994, 5, 15),
                 "123456789",
                 "Bereznyakivska 12"));
 
@@ -248,7 +249,7 @@ class UsersControllerTest {
                 "Dima",
                 "Smith",
                 "Dima@example.com",
-                LocalDate.now().minusYears(25),
+                LocalDate.of(2000, 5, 15),
                 "987654321",
                 "Bereznyakivska 31"));
 
@@ -258,7 +259,7 @@ class UsersControllerTest {
         // Perform a GET request to retrieve users by filter and assert the response
         mockMvc.perform(get("/api/users/")
                         .param("dateOfBirthFrom", "1990-01-01")
-                        .param("dateOfBirthTo", "2000-01-01")
+                        .param("dateOfBirthTo", "2001-01-01")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
